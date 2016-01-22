@@ -18,7 +18,6 @@ func (t Temperature) Pretty() string {
 }
 
 type TemperatureReader interface {
-	Setup() error
 	ReadTemp() (*Temperature, error)
 }
 
@@ -26,24 +25,20 @@ type tempReader struct {
 	serial string
 }
 
-func NewTemperatureReader(serialNumber string) TemperatureReader {
-	return &tempReader{
-		serial: serialNumber,
-	}
-}
-
-func (t tempReader) Setup() error {
+func NewTemperatureReader(serialNumber string) (TemperatureReader, error) {
 	err := exec.Command("modprobe", "w1-gpio").Run()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	err = exec.Command("modprobe", "w1-therm").Run()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return &tempReader{
+		serial: serialNumber,
+	}, nil
 }
 
 func (t tempReader) ReadTemp() (*Temperature, error) {
