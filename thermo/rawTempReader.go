@@ -6,11 +6,6 @@ import (
 	"strings"
 )
 
-const (
-	base_dir = "/sys/bus/w1/devices/"
-	file     = "/w1_slave"
-)
-
 var (
 	invalidLinesError = fmt.Errorf("Invalid raw temp")
 	noTError          = fmt.Errorf("Unable to find t= temp")

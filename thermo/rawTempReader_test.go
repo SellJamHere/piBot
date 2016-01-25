@@ -1,7 +1,6 @@
 package thermo
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -13,7 +12,6 @@ type RawTempReaderTestSuite struct {
 }
 
 func TestRawTempReaderTestSuite(t *testing.T) {
-	fmt.Println("test")
 	suite.Run(t, new(RawTempReaderTestSuite))
 }
 

@@ -3,9 +3,13 @@ package thermo
 import (
 	"bufio"
 	"fmt"
-	"os"
 	"os/exec"
 	"time"
+)
+
+const (
+	base_dir  = "/sys/bus/w1/devices/"
+	file_path = "/w1_slave"
 )
 
 type Temperature struct {
@@ -23,6 +27,8 @@ type TemperatureReader interface {
 
 type tempReader struct {
 	serial string
+
+	fs fileSystem
 }
 
 func NewTemperatureReader(serialNumber string) (TemperatureReader, error) {
@@ -38,6 +44,7 @@ func NewTemperatureReader(serialNumber string) (TemperatureReader, error) {
 
 	return &tempReader{
 		serial: serialNumber,
+		fs:     osFS{},
 	}, nil
 }
 
@@ -64,7 +71,7 @@ func (t tempReader) ReadTemp() (*Temperature, error) {
 }
 
 func (t tempReader) readRaw() (rawTempParser, error) {
-	file, err := os.Open(base_dir + t.serial + file)
+	file, err := t.fs.Open(base_dir + t.serial + file_path)
 	if err != nil {
 		return nil, err
 	}
