@@ -21,6 +21,7 @@ func TestTempReaderTestSuite(t *testing.T) {
 	suite.Run(t, new(TempReaderTestSuite))
 }
 
+// Mock types
 type fileSystemMockValid struct{}
 
 func (fsmv *fileSystemMockValid) Open(name string) (file, error) {
@@ -114,6 +115,7 @@ func (fs *fileSystemMockErrorRead) Open(name string) (file, error) {
 	return &fileMockInvalidSecondTime{}, nil
 }
 
+// Return mock types
 func givenFileSystemWithoutErrors() fileSystem {
 	return new(fileSystemMockValid)
 }
@@ -203,4 +205,14 @@ func (suite *TempReaderTestSuite) TestTempReader_ReadTemp_failureTemperature() {
 
 	assert.Nil(suite.T(), temp)
 	assert.Error(suite.T(), err)
+}
+
+func (suite *TempReaderTestSuite) TestTemperature_Pretty() {
+	temp := Temperature{
+		Celsius:    12,
+		Fahrenheit: 13,
+	}
+
+	assert.InEpsilon(suite.T(), 12, temp.Celsius, 0.00000001)
+	assert.InEpsilon(suite.T(), 13, temp.Fahrenheit, 0.00000001)
 }

@@ -13,8 +13,9 @@ const (
 )
 
 type Temperature struct {
-	Celsius    float64
-	Fahrenheit float64
+	Celsius      float64
+	Fahrenheit   float64
+	MeasuredTime time.Time
 }
 
 func (t Temperature) Pretty() string {
@@ -66,6 +67,8 @@ func (t tempReader) ReadTemp() (*Temperature, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	temp.MeasuredTime = time.Now()
 
 	return temp, nil
 }
